@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:masterchief_cv/main.dart';
 import 'package:masterchief_cv/widgets/project_section.dart';
@@ -166,8 +168,42 @@ class _HeroHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return const AnimatedOrbitWidget();
+  }
+}
+
+class AnimatedOrbitWidget extends StatefulWidget {
+  const AnimatedOrbitWidget({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _AnimatedOrbitWidgetState();
+}
+
+class _AnimatedOrbitWidgetState extends State<AnimatedOrbitWidget>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      duration: const Duration(days: 1),
+      vsync: this,
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      height: 400,
+      height: 500,
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topLeft,
@@ -206,6 +242,9 @@ class _HeroHeader extends StatelessWidget {
               ),
             ),
           ),
+
+          ..._buildOrbitingPlanets(),
+          // Center Star
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -215,33 +254,51 @@ class _HeroHeader extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 4),
+                      border: Border.all(
+                        color: Colors.yellow.shade300,
+                        width: 4,
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.opaque(0.3),
-                          blurRadius: 20,
-                          spreadRadius: 5,
+                          color: Colors.orange.opaque(0.5),
+                          blurRadius: 30,
+                          spreadRadius: 10,
                         ),
                       ],
+                      gradient: RadialGradient(
+                        colors: [
+                          Colors.yellow.shade300,
+                          Colors.orange.shade700,
+                          Colors.red.shade900,
+                        ],
+                        stops: const [0.3, 0.7, 1.0],
+                      ),
                     ),
                     child: const CircleAvatar(
-                      radius: 60,
-                      backgroundColor: Colors.white,
-                      child: Icon(Icons.person, size: 70, color: Colors.blue),
+                      radius: 55,
+                      backgroundColor: Colors.transparent,
+                      // child: Icon(Icons.star, size: 50, color: Colors.white),
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
                 const Text(
                   'MasterChief',
                   style: TextStyle(
-                    fontSize: 42,
+                    fontSize: 38,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                     letterSpacing: 1.5,
+                    shadows: [
+                      Shadow(
+                        blurRadius: 10,
+                        color: Colors.orange,
+                        offset: Offset(0, 0),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 20,
@@ -254,22 +311,11 @@ class _HeroHeader extends StatelessWidget {
                   child: const Text(
                     'Creative Technologist & Full-Stack Developer',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 14,
                       color: Colors.white,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildStatIcon(Icons.code, '5+ Years'),
-                    const SizedBox(width: 20),
-                    _buildStatIcon(Icons.rocket_launch, '12 Projects'),
-                    const SizedBox(width: 20),
-                    _buildStatIcon(Icons.people, '50+ Clients'),
-                  ],
                 ),
               ],
             ),
@@ -279,22 +325,102 @@ class _HeroHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildStatIcon(IconData icon, String label) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: Colors.white.opaque(0.2),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(icon, color: Colors.white, size: 24),
-        ),
-        const SizedBox(height: 8),
-        Text(label, style: const TextStyle(color: Colors.white, fontSize: 12)),
-      ],
-    );
+  List<Widget> _buildOrbitingPlanets() {
+    final planets = [
+      PlanetData(
+        radius: 130,
+        size: 20,
+        color: Colors.red.shade400,
+        speed: 8000,
+        name: 'Mars',
+      ),
+      PlanetData(
+        radius: 160,
+        size: 28,
+        color: Colors.red.shade400,
+        speed: 6000,
+        name: 'Earth',
+      ),
+      PlanetData(
+        radius: 200,
+        size: 35,
+        color: Colors.red.shade400,
+        speed: 4000,
+        name: 'Jupiter',
+      ),
+      PlanetData(
+        radius: 240,
+        size: 24,
+        color: Colors.red.shade400,
+        speed: 3000,
+        name: 'Neptune',
+      ),
+    ];
+
+    return planets.asMap().entries.map((entry) {
+      final index = entry.key;
+      final planet = entry.value;
+
+      return AnimatedBuilder(
+        animation: _controller,
+        builder: ((context, child) {
+          // Calculate angle - now using speed multiplier
+          // _controller.value goes from 0 to 1 over 365 days
+          // Multiply by 2π and speed to get reasonable orbit rates
+          final angle =
+              (_controller.value * 2 * pi * planet.speed) + (index * pi / 2);
+          final x = cos(angle) * planet.radius;
+          final y = sin(angle) * planet.radius;
+
+          return Positioned(
+            left: MediaQuery.of(context).size.width / 2 + x - planet.size / 2,
+            top: 250 + y - planet.size / 2,
+            child: Container(
+              width: planet.size,
+              height: planet.size,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: planet.color,
+                boxShadow: [
+                  BoxShadow(
+                    color: planet.color.opaque(0.5),
+                    blurRadius: 10,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Text(
+                  planet.name[0],
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }),
+      );
+    }).toList();
   }
+}
+
+class PlanetData {
+  final double radius;
+  final double size;
+  final Color color;
+  final double speed;
+  final String name;
+
+  PlanetData({
+    required this.radius,
+    required this.size,
+    required this.color,
+    required this.speed,
+    required this.name,
+  });
 }
 
 // Footer Widget
