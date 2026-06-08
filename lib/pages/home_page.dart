@@ -180,8 +180,9 @@ class AnimatedOrbitWidget extends StatefulWidget {
 }
 
 class _AnimatedOrbitWidgetState extends State<AnimatedOrbitWidget>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
+  late AnimationController _starfieldController;
 
   @override
   void initState() {
@@ -191,138 +192,212 @@ class _AnimatedOrbitWidgetState extends State<AnimatedOrbitWidget>
       duration: const Duration(days: 1),
       vsync: this,
     )..repeat();
+
+    _starfieldController = AnimationController(
+      duration: const Duration(seconds: 30),
+      vsync: this,
+    )..repeat(reverse: true);
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _starfieldController.dispose();
 
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 500,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Colors.blue.shade900,
-            Colors.purple.shade800,
-            Colors.deepPurple.shade900,
-          ],
-        ),
-      ),
-      child: Stack(
-        children: [
-          // Animated background circles
-          Positioned(
-            right: -50,
-            top: -50,
-            child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.opaque(0.05),
-              ),
+    return AnimatedBuilder(
+      animation: _starfieldController,
+      builder: (context, child) {
+        return Container(
+          height: 500,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Color.lerp(
+                  Colors.blue.shade900,
+                  Colors.purple.shade800,
+                  _starfieldController.value,
+                )!,
+                const Color(0xFF1A003D),
+                const Color(0xFF000008),
+              ],
+              stops: const [0.0, 0.4, 1.0],
             ),
           ),
-          Positioned(
-            left: -30,
-            bottom: -30,
-            child: Container(
-              width: 150,
-              height: 150,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.opaque(0.05),
-              ),
-            ),
-          ),
+          child: Stack(
+            children: [
+              ..._buildStarfield(),
 
-          ..._buildOrbitingPlanets(),
-          // Center Star
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Hero(
-                  tag: 'avatar',
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Colors.yellow.shade300,
-                        width: 4,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.orange.opaque(0.5),
-                          blurRadius: 30,
-                          spreadRadius: 10,
-                        ),
-                      ],
-                      gradient: RadialGradient(
-                        colors: [
-                          Colors.yellow.shade300,
-                          Colors.orange.shade700,
-                          Colors.red.shade900,
-                        ],
-                        stops: const [0.3, 0.7, 1.0],
-                      ),
-                    ),
-                    child: const CircleAvatar(
-                      radius: 55,
-                      backgroundColor: Colors.transparent,
-                      // child: Icon(Icons.star, size: 50, color: Colors.white),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'MasterChief',
-                  style: TextStyle(
-                    fontSize: 38,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    letterSpacing: 1.5,
-                    shadows: [
-                      Shadow(
-                        blurRadius: 10,
-                        color: Colors.orange,
-                        offset: Offset(0, 0),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 8,
-                  ),
+              ..._buildGlowingStars(),
+              // Animated background circles
+              Positioned(
+                right: -50,
+                top: -50,
+                child: Container(
+                  width: 200,
+                  height: 200,
                   decoration: BoxDecoration(
-                    color: Colors.white.opaque(0.2),
-                    borderRadius: BorderRadius.circular(30),
+                    shape: BoxShape.circle,
+                    color: Colors.white.opaque(0.05),
                   ),
-                  child: const Text(
-                    'Creative Technologist & Full-Stack Developer',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
+                ),
+              ),
+              Positioned(
+                left: -30,
+                bottom: -30,
+                child: Container(
+                  width: 150,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white.opaque(0.05),
+                  ),
+                ),
+              ),
+
+              ..._buildOrbitingPlanets(),
+              // Center Star
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Hero(
+                      tag: 'avatar',
+                      child: Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.yellow.shade300,
+                            width: 4,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.orange.opaque(0.5),
+                              blurRadius: 30,
+                              spreadRadius: 10,
+                            ),
+                          ],
+                          gradient: RadialGradient(
+                            colors: [
+                              Colors.yellow.shade300,
+                              Colors.orange.shade700,
+                              Colors.red.shade900,
+                            ],
+                            stops: const [0.3, 0.7, 1.0],
+                          ),
+                        ),
+                        child: const CircleAvatar(
+                          radius: 55,
+                          backgroundColor: Colors.transparent,
+                          // child: Icon(Icons.star, size: 50, color: Colors.white),
+                        ),
+                      ),
                     ),
-                  ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'MasterChief',
+                      style: TextStyle(
+                        fontSize: 38,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        letterSpacing: 1.5,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 10,
+                            color: Colors.orange,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.opaque(0.2),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: const Text(
+                        'Creative Technologist & Full-Stack Developer',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  List<Widget> _buildStarfield() {
+    final stars = <Widget>[];
+    final random = Random(42);
+
+    for (int i = 0; i < 150; i++) {
+      stars.add(
+        Positioned(
+          left: random.nextDouble() * MediaQuery.of(context).size.width,
+          top: random.nextDouble() * 500,
+          child: Container(
+            width: random.nextDouble() * 2 + 0.5,
+            height: random.nextDouble() * 2 + 0.5,
+            decoration: BoxDecoration(
+              color: Colors.white.opaque(random.nextDouble() * 0.5 + 0.2),
+              shape: BoxShape.circle,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return stars;
+  }
+
+  List<Widget> _buildGlowingStars() {
+    final stars = <Widget>[];
+    final random = Random(73);
+
+    for (int i = 0; i < 20; i++) {
+      stars.add(
+        Positioned(
+          left: random.nextDouble() * MediaQuery.of(context).size.width,
+          top: random.nextDouble() * 500,
+          child: Container(
+            width: 3,
+            height: 3,
+            decoration: BoxDecoration(
+              color: Colors.white.opaque(0.8),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.white.opaque(0.5),
+                  blurRadius: 4,
+                  spreadRadius: 1,
                 ),
               ],
             ),
           ),
-        ],
-      ),
-    );
+        ),
+      );
+    }
+
+    return stars;
   }
 
   List<Widget> _buildOrbitingPlanets() {
@@ -337,21 +412,21 @@ class _AnimatedOrbitWidgetState extends State<AnimatedOrbitWidget>
       PlanetData(
         radius: 160,
         size: 28,
-        color: Colors.red.shade400,
+        color: Colors.blue.shade400,
         speed: 6000,
         name: 'Earth',
       ),
       PlanetData(
         radius: 200,
         size: 35,
-        color: Colors.red.shade400,
+        color: Colors.orange.shade400,
         speed: 4000,
         name: 'Jupiter',
       ),
       PlanetData(
         radius: 240,
         size: 24,
-        color: Colors.red.shade400,
+        color: Colors.cyan.shade400,
         speed: 3000,
         name: 'Neptune',
       ),
