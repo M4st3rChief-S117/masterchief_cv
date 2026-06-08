@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:masterchief_cv/models/project_item.dart';
 import 'package:masterchief_cv/widgets/section_header.dart';
 import 'package:masterchief_cv/widgets/work_card.dart';
 
@@ -33,22 +34,50 @@ class ProjectSection extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           SizedBox(
-            height: 220,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: projects.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 16),
-              itemBuilder: (context, index) {
-                final project = projects[index];
-                return SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.25,
-                  child: WorkCard(
-                    title: project.title,
-                    description: project.description,
-                    technologies: project.technologies,
-                    icon: project.icon,
-                    gradientColors: gradientColors,
-                  ),
+            height: 400,
+            child: LayoutBuilder(
+              builder: (context, constraints) {
+                final availableWidth = constraints.maxWidth;
+                final spacing = 20.0;
+                const minCardWidth = 350.0;
+                const maxCardWidth = 700.0;
+
+                final maxCardsThatFit =
+                    ((availableWidth + spacing) / (minCardWidth + spacing))
+                        .floor();
+                final visibleCards = projects.length < maxCardsThatFit
+                    ? projects.length
+                    : maxCardsThatFit;
+
+                final cardWidth =
+                    (availableWidth - (spacing * (visibleCards - 1))) /
+                    visibleCards;
+
+                final clampedWidth = cardWidth.clamp(
+                  minCardWidth,
+                  maxCardWidth,
+                );
+
+                return ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: projects.length,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 20),
+                  itemBuilder: (context, index) {
+                    final project = projects[index];
+
+                    return SizedBox(
+                      width: clampedWidth,
+                      child: WorkCard(
+                        title: project.title,
+                        description: project.description,
+                        technologies: project.technologies,
+                        icon: project.icon,
+                        gradientColors: gradientColors,
+                        imageUrl: project.imageUrl,
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -57,18 +86,4 @@ class ProjectSection extends StatelessWidget {
       ),
     );
   }
-}
-
-class ProjectItem {
-  final String title;
-  final String description;
-  final List<String> technologies;
-  final IconData icon;
-
-  const ProjectItem({
-    required this.title,
-    required this.description,
-    required this.technologies,
-    required this.icon,
-  });
 }
