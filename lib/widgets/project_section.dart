@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:masterchief_cv/models/project_item.dart';
+import 'package:masterchief_cv/models/project_detail.dart';
 import 'package:masterchief_cv/widgets/section_header.dart';
 import 'package:masterchief_cv/widgets/work_card.dart';
 
@@ -8,7 +8,7 @@ class ProjectSection extends StatelessWidget {
   final String subtitle;
   final IconData icon;
   final List<Color> gradientColors;
-  final List<ProjectItem> projects;
+  final List<ProjectDetail> projects;
 
   const ProjectSection({
     super.key,

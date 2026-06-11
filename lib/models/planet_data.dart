@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:masterchief_cv/models/project_detail.dart';
 
 class PlanetData {
   final double radiusX; // Horizontal radius (controls left/right distance)
@@ -8,6 +9,7 @@ class PlanetData {
   final double speed;
   final String name;
   final IconData icon;
+  final List<ProjectDetail>? projectDetail;
 
   PlanetData({
     required this.radiusX,
@@ -17,5 +19,6 @@ class PlanetData {
     required this.speed,
     required this.name,
     required this.icon,
+    this.projectDetail,
   });
 }
