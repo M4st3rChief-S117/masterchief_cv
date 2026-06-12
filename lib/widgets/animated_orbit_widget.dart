@@ -325,14 +325,12 @@ class _AnimatedOrbitWidgetState extends State<AnimatedOrbitWidget>
                 ],
               ),
               child: SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Close button
-                      Align(
+                child: Column(
+                  children: [
+                    // Close button
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Align(
                         alignment: Alignment.topRight,
                         child: MouseRegion(
                           cursor: SystemMouseCursors.click,
@@ -350,132 +348,378 @@ class _AnimatedOrbitWidgetState extends State<AnimatedOrbitWidget>
                               child: const Icon(
                                 Icons.close,
                                 color: Colors.white,
-                                size: 18, // Smaller icon
+                                size: 18,
                               ),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20), // Reduced spacing
-                      // Name
-                      const Text(
-                        'MasterChief',
-                        style: TextStyle(
-                          fontSize: 28, // Reduced from 42
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          letterSpacing: 1.5, // Reduced
-                        ),
-                      ),
-                      const SizedBox(height: 8), // Reduced
-                      // Divider
-                      Container(
-                        width: 40, // Reduced from 60
-                        height: 2, // Reduced from 3
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Colors.orange, Colors.yellow],
-                          ),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                      const SizedBox(height: 16), // Reduced from 20
-                      // Title
-                      const Text(
-                        'Creative Technologist & Full-Stack Developer',
-                        style: TextStyle(
-                          fontSize: 14, // Reduced from 20
-                          color: Colors.white70,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.3, // Reduced
-                        ),
-                      ),
-                      const SizedBox(height: 20), // Reduced from 32
-                      // Main content card
-                      Container(
-                        padding: const EdgeInsets.all(16), // Reduced from 24
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              Colors.blue.shade900.opaque(0.8),
-                              Colors.purple.shade900.opaque(0.8),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(
-                            20,
-                          ), // Reduced from 24
-                          border: Border.all(color: Colors.white.opaque(0.2)),
-                        ),
+                    ),
+
+                    // Scrollable content
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Header
                             const Text(
-                              "Let's Build Something Amazing Together",
+                              'MasterChief',
                               style: TextStyle(
-                                fontSize: 16, // Reduced from 22
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+
+                            // Title
+                            const Text(
+                              'Creative Technologist & Full-Stack Developer',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.white70,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+
+                            // About Me & Experience Row
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // About Me Section
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'About Me',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Container(
+                                        width: 30,
+                                        height: 2,
+                                        decoration: BoxDecoration(
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Colors.orange,
+                                              Colors.yellow,
+                                            ],
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            2,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      const Text(
+                                        'Study trips in England and Germany. Excellent communication skills, both in formal and informal contexts. High proficiency in software and hardware technologies. Proactive approach to continuous learning: use of AI, discussion with experienced colleagues, and ability to take on new challenges. Intellectual curiosity and desire to learn using all available resources (training, team exchanges, self-learning).',
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: Colors.white70,
+                                          height: 1.5,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+
+                                // Experience Section
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const Text(
+                                        'Experience',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Container(
+                                        width: 30,
+                                        height: 2,
+                                        decoration: BoxDecoration(
+                                          gradient: const LinearGradient(
+                                            colors: [
+                                              Colors.orange,
+                                              Colors.yellow,
+                                            ],
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            2,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(height: 12),
+                                      _buildExperienceItem(
+                                        'Full-Stack Developer',
+                                        'Open-One S.R.L. | 2024 - Present',
+                                        'At Open-One, I had the opportunity to broaden my horizons to new realities and new technologies, especially the open-source world. I had the chance to work on global projects, also interacting with people in other countries. I quickly learned new programming languages independently, often consulting with more experienced colleagues and proposing new, more effective and efficient approaches.',
+                                      ),
+                                      const SizedBox(height: 12),
+                                      _buildExperienceItem(
+                                        'HD1 & HD2 Technician',
+                                        'Intred S.P.A. | 2022 - 2024',
+                                        'At Intred, being in a very dynamic environment and in close contact with colleagues and clients, I had the opportunity to greatly improve my communication and technical skills. Throughout my experience, I quickly learned my role to the point of proposing new procedures to follow for troubleshooting faults on phone services for business clients, also becoming a reference point for my team.',
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 24),
+
+                            // Education Section
+                            const Text(
+                              'Education',
+                              style: TextStyle(
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white,
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 12), // Reduced from 16
-                            const Text(
-                              'Open for collaborations, freelance work, and innovative projects',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontSize: 12, // Reduced from 14
-                                height: 1.4, // Reduced from 1.5
+                            const SizedBox(height: 8),
+                            Container(
+                              width: 30,
+                              height: 2,
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [Colors.orange, Colors.yellow],
+                                ),
+                                borderRadius: BorderRadius.circular(2),
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 16), // Reduced from 24
-                            // Contact chips
+                            const SizedBox(height: 12),
+                            _buildEducationItem(
+                              'Certificazione CAE C1',
+                              'British School of English | 2020',
+                            ),
+                            const SizedBox(height: 12),
+                            _buildEducationItem(
+                              'High School Diploma in Computer Science',
+                              'I.I.S. Benedetto Castelli | 2015 - 2020',
+                            ),
+
+                            const SizedBox(height: 24),
+
+                            // Skills Section
+                            const Text(
+                              'Skills',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Container(
+                              width: 30,
+                              height: 2,
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [Colors.orange, Colors.yellow],
+                                ),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+
+                            // Skills grid
                             Wrap(
-                              spacing: 8, // Reduced from 12
-                              runSpacing: 8, // Reduced from 12
-                              alignment: WrapAlignment.center,
+                              spacing: 10,
+                              runSpacing: 10,
                               children: [
-                                _buildContactChip(
-                                  Icons.email,
-                                  'bgamer9999.b9@gmail.com',
-                                ),
-                                _buildContactChip(
-                                  Icons.phone,
-                                  '+39 348 893 6829',
-                                ),
-                                _buildContactChip(
-                                  Icons.location_on,
-                                  'Nuvolera, BS',
-                                ),
-                                _buildContactChip(
-                                  Icons.code,
-                                  'github.com/M4st3rChief-S117',
-                                ),
+                                _buildSkillChip('Dart, Flutter'),
+                                _buildSkillChip('PostgreSQL'),
+                                _buildSkillChip('Java'),
+                                _buildSkillChip('Python, Django API'),
+                                _buildSkillChip('GDSript, Godot'),
+                                _buildSkillChip('Bash, Linux'),
+                                _buildSkillChip('Git'),
+                                _buildSkillChip('REST APIs'),
                               ],
                             ),
-                            const SizedBox(height: 16), // Reduced from 24
-                            // Social circles
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                _buildSocialCircle(Icons.android),
-                                const SizedBox(width: 12), // Reduced from 16
-                                _buildSocialCircle(Icons.link),
-                                const SizedBox(width: 12), // Reduced from 16
-                                _buildSocialCircle(Icons.alternate_email),
-                              ],
+
+                            const SizedBox(height: 24),
+
+                            // Contact Card (original)
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topLeft,
+                                  end: Alignment.bottomRight,
+                                  colors: [
+                                    Colors.blue.shade900.opaque(0.8),
+                                    Colors.purple.shade900.opaque(0.8),
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: Colors.white.opaque(0.2),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    "Let's Build Something Amazing Together",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 12),
+                                  const Text(
+                                    'Open for collaborations, freelance work, and innovative projects',
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 12,
+                                      height: 1.4,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  // Contact chips
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 8,
+                                    alignment: WrapAlignment.center,
+                                    children: [
+                                      _buildContactChip(
+                                        Icons.email,
+                                        'bgamer9999.b9@gmail.com',
+                                      ),
+                                      _buildContactChip(
+                                        Icons.phone,
+                                        '+39 348 893 6829',
+                                      ),
+                                      _buildContactChip(
+                                        Icons.location_on,
+                                        'Nuvolera, BS',
+                                      ),
+                                      _buildContactChip(
+                                        Icons.code,
+                                        'github.com/M4st3rChief-S117',
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  // Social circles
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      _buildSocialCircle(Icons.android),
+                                      const SizedBox(width: 12),
+                                      _buildSocialCircle(Icons.link),
+                                      const SizedBox(width: 12),
+                                      _buildSocialCircle(Icons.alternate_email),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
+
+                            const SizedBox(height: 24),
                           ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  // Helper method for experience items
+  Widget _buildExperienceItem(String title, String period, String description) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          period,
+          style: const TextStyle(fontSize: 11, color: Colors.white54),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          description,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Colors.white70,
+            height: 1.4,
+          ),
+        ),
+      ],
+    );
+  }
+
+  // Helper method for education items
+  Widget _buildEducationItem(String degree, String institution) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          degree,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          institution,
+          style: const TextStyle(fontSize: 11, color: Colors.white54),
+        ),
+      ],
+    );
+  }
+
+  // Helper method for skill chips
+  Widget _buildSkillChip(String skill) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white.opaque(0.1),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.opaque(0.2)),
+      ),
+      child: Text(
+        skill,
+        style: const TextStyle(color: Colors.white70, fontSize: 12),
       ),
     );
   }
@@ -911,51 +1155,6 @@ class _AnimatedOrbitWidgetState extends State<AnimatedOrbitWidget>
             imageUrl: 'assets/images/smart_home.jpg',
             color: Colors.red.shade400,
           ),
-          ProjectDetail(
-            title: 'IoT Smart Home Hub',
-            description:
-                'Created a centralized platform controlling 50+ smart devices with predictive automation.',
-            icon: Icons.home,
-            technologies: ['Raspberry Pi', 'MQTT', 'Flutter'],
-            imageUrl: 'assets/images/smart_home.jpg',
-            color: Colors.red.shade400,
-          ),
-          ProjectDetail(
-            title: 'IoT Smart Home Hub',
-            description:
-                'Created a centralized platform controlling 50+ smart devices with predictive automation.',
-            icon: Icons.home,
-            technologies: ['Raspberry Pi', 'MQTT', 'Flutter'],
-            imageUrl: 'assets/images/smart_home.jpg',
-            color: Colors.red.shade400,
-          ),
-          ProjectDetail(
-            title: 'IoT Smart Home Hub',
-            description:
-                'Created a centralized platform controlling 50+ smart devices with predictive automation.',
-            icon: Icons.home,
-            technologies: ['Raspberry Pi', 'MQTT', 'Flutter'],
-            imageUrl: 'assets/images/smart_home.jpg',
-            color: Colors.red.shade400,
-          ),
-          ProjectDetail(
-            title: 'IoT Smart Home Hub',
-            description:
-                'Created a centralized platform controlling 50+ smart devices with predictive automation.',
-            icon: Icons.home,
-            technologies: ['Raspberry Pi', 'MQTT', 'Flutter'],
-            imageUrl: 'assets/images/smart_home.jpg',
-            color: Colors.red.shade400,
-          ),
-          ProjectDetail(
-            title: 'IoT Smart Home Hub',
-            description:
-                'Created a centralized platform controlling 50+ smart devices with predictive automation.',
-            icon: Icons.home,
-            technologies: ['Raspberry Pi', 'MQTT', 'Flutter'],
-            imageUrl: 'assets/images/smart_home.jpg',
-            color: Colors.red.shade400,
-          ),
         ],
       ),
       PlanetData(
@@ -1050,7 +1249,6 @@ class _AnimatedOrbitWidgetState extends State<AnimatedOrbitWidget>
             top: centerY + y - planet.size / 2,
             child: InkWell(
               onTap: () {
-                print('Tapped ${planet.name}');
                 _displayDetailView(planet);
               },
               child: Container(
